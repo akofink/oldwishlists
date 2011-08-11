@@ -47,9 +47,10 @@
             }
         }
     }else if(isset($_POST['oldPassword'], $_POST['password1'], $_POST['password2'])) {
-        if($_POST['oldPassword']==$_SESSION['currentUser']->password && $_POST['password1']!='' && $_POST['password1']==$_POST['password2']) {
+        $passwordArr = mysql_fetch_assoc(mysql_query('select sha("'.$_POST['oldPassword'].'")'));
+        if($passwordArr['sha("'.$_POST['oldPassword'].'")']==$_SESSION['currentUser']->password && $_POST['password1']!='' && $_POST['password1']==$_POST['password2']) {
             $_SESSION['currentUser']->changePassword($_POST['password1']);
-        }else if($_POST['oldPassword']!=$_SESSION['currentUser']->password) {
+        }else if($passwordArr['sha("'.$_POST['oldPassword'].'")']!=$_SESSION['currentUser']->password) {
             echo 'Incorrect password.
                 <meta http-equiv="refresh" content="1;url=.?form=account" />';
         }else if($_POST['password1']!=$_POST['password2']) {

@@ -25,14 +25,16 @@ class User {
     function addUser($username, $firstname, $lastname, $password) {
         $this->dbConnect();
         mysql_query('insert into users (username, firstname, lastname, password)
-                    values ("'.$username.'", "'.$firstname.'", "'.$lastname.'", "'.$password.'")
+                    values ("'.$username.'", "'.$firstname.'", "'.$lastname.'", sha("'.$password.'"))
                     ') or die(mysql_error());
         echo '<meta http-equiv="refresh" content="0; url=." />';
     }
     
     function changePassword($password) {
         $this->dbConnect();
-        mysql_query('update users set password="'.$password.'" where username="'.$this->username.'"') or die(mysql_error());
+        mysql_query('update users set password=sha("'.$password.'") where username="'.$this->username.'"') or die(mysql_error());
+        $arr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$this->username.'"'));
+        $this->password = $arr['password'];
         echo 'Password Changed.<meta http-equiv="refresh" content="1; url=." />';
     }
     
@@ -271,8 +273,9 @@ class User {
     
     function login($username, $password) {
         $this->dbConnect();
+        $passwordArr = mysql_fetch_assoc(mysql_query('select sha("'.$password.'")'));
         $arr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'";')) or die('Invalid username/password <meta http-equiv="refresh" content="1;url=." />');
-        if($arr['password'] == $password) {
+        if($arr['password'] == $passwordArr['sha("'.$password.'")']) {
             $this->isLoggedIn = true;
             $this->username = $arr['username'];
             $this->firstname = $arr['firstname'];
