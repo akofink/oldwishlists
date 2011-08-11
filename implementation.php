@@ -140,7 +140,7 @@ class User {
             }
             echo '
                 <td>'.$row['item'].'</td>
-                <td><a href="'.$row['url'].'">'.$row['url'].'</a></td>
+                <td><a href="'.$row['url'].'" target="_page">'.$row['url'].'</a></td>
                 ';
             
             if($this->isLoggedIn() && $this->username == $username) {
