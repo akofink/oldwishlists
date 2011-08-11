@@ -15,15 +15,64 @@ class User {
     
     var $isLoggedIn = false;
     
+    function addListItem($item, $url) {
+        $this->dbConnect();
+        mysql_query('insert into lists (username, item, url) values
+                    ("'.$this->username.'", "'.$item.'", "'.$url.'")') or die(mysql_error());
+        echo '<meta http-equiv="refresh" content="0; url=." />';
+    }
+    
+    function addUser($username, $firstname, $lastname, $password) {
+        $this->dbConnect();
+        mysql_query('insert into users (username, firstname, lastname, password)
+                    values ("'.$username.'", "'.$firstname.'", "'.$lastname.'", "'.$password.'")
+                    ') or die(mysql_error());
+        echo '<meta http-equiv="refresh" content="0; url=." />';
+    }
+    
     function dbConnect() {
         $dbConnection = mysql_connect($this->dbHostname, $this->dbUsername) or die(mysql_error());
         mysql_select_db($this->dbName) or die(mysql_error());
     }
     
+    function displayListOfUser($username) {
+        $this->dbConnect();
+        $userArr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'"'));
+        
+        echo '<h3>'.$username.'\'s Christmas List</h3><table>';
+        
+        if($this->isLoggedIn() && $this->username != $username) {
+            echo '<th></th>';
+        }
+        
+        echo '
+            <th>Item</th>
+            <th>URL</th>
+            ';
+            
+        $result = mysql_query('select * from lists where username="'.$username.'"');
+        while($row = mysql_fetch_array($result)) {
+            echo '<tr>';
+            if($this->isLoggedIn() && $this->username != $username) {
+                if($row['status']) {
+                    echo '<td>&#x2713;</td>';
+                }else {
+                    echo '<td></td>';
+                }
+            }
+            echo '
+                <td>'.$row['item'].'</td>
+                <td>'.$row['url'].'</td>
+                </tr>
+                ';
+        }
+    }
+    
     public function displayLoginForm() {
         echo '
                 <div id="floatRightBox">
-                <h3>Login</h3>
+                <a href=".?form=newUser">Create a new account</a>
+                <h3>Existing User</h3>
                 <form action="." method="post">
                 <input type="hidden" name="form" value="login" />
                 <label for="username">Username: </label>
@@ -40,47 +89,64 @@ class User {
     function displayLoggedInForm() {
         echo '
                 <div id="floatRightBox">
+                <a href=".?form=newListItem">New List Item</a>
                 <a href=".?form=logout">Logout</a>
                 </div>
                 ';
     }
     
-    function displayListOfUser($username) {
-        $this->dbConnect();
-        $userArr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'"'));
-        
-        if($this->isLoggedIn()) {
-            if($this->username == $username) {
-                echo '
-                    <h3>'.$username.'\'s Christmas List</h3>
-                    <table>
-                    <th>Item</th>
-                    <th>URL</th>
-                    ';
-            }else {
-                echo '
-                    <h3>'.$username.'\'s Christmas List</h3>
-                    <table>
-                    <th>Status</th>
-                    <th>Item</th>
-                    <th>URL</th>
-                    ';
-            }
-            
-        }else {
-            echo '
-                <h3>'.$username.'\'s Christmas List</h3>
+    function displayNewListItemForm() {
+        echo '
+            <form action="." method="post">
                 <table>
-                <th>Item</th>
-                <th>URL</th>
-                ';
-        }
-        $result = mysql_query('select * from lists where username="'.$username.'"');
-        while($row = mysql_fetch_array($result)) {
-            echo '
-                    
-                    ';
-        }
+                <tr><td>
+                <label for="item">Item: </label></td><td>
+                <input type="text" id="item" name="item" />
+                </td></tr>
+                <tr><td>
+                <label for="url">URL: </label></td><td>
+                <input type="text" id="url" name="url" /><br />
+                </td></tr>
+                <tr><td>
+                <input type="submit" value="Submit" /></td><td>
+                <input type="reset" value="Reset" />
+                </td></tr>
+                </table>
+            </form>
+            ';
+    }
+    
+    function displayNewUserForm($username, $firstname, $lastname) {
+        echo '<h3>New User</h3>';
+        echo '
+            <form action="." method="post">
+                <table>
+                <tr><td>
+                <label for="username">Username: </label></td><td>
+                <input type="text" id="username" name="username" value="'.$username.'" />
+                </td></tr>
+                <tr><td>
+                <label for="firstname">First Name: </label></td><td>
+                <input type="text" id="firstname" name="firstname" value="'.$firstname.'" />
+                </td></tr>
+                <tr><td>
+                <label for="lastname">Last Name: </label></td><td>
+                <input type="text" id="lastname" name="lastname" value="'.$lastname.'" />
+                </td></tr>
+                <tr><td>
+                <label for="password1">Password: </label></td><td>
+                <input type="password" id="password1" name="password1" />
+                </td></tr>
+                <tr><td>
+                <label for="password2">Confirm Password: </label></td><td>
+                <input type="password" id="password2" name="password2" />
+                </td></tr>
+                <tr><td>
+                <input type="submit" value="Submit" />
+                <input type="reset" value="Reset" />
+                </td></tr>
+            </form></table>
+            ';
     }
     
     function displayUsersTable() {

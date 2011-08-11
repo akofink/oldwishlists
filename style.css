@@ -22,6 +22,9 @@ body {
 h1, h2, h3 {
     margin:10px;
 }
+h4, h5 {
+    margin:0;
+}
 #headerBar {
     background-color:#272;
     margin:0;
@@ -30,6 +33,9 @@ h1, h2, h3 {
 }
 #headerBar a:hover, #floatRightBox a:hover {
     background-color:#393;
+}
+#item, #url {
+    width:250px;
 }
 table {
     background-color:#600;
