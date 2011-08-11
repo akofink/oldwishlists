@@ -1,9 +1,11 @@
 <?php
     include 'header.php';
     
-    echo '
-            <h1>Christmas Lists</h1>
-            ';
+    if(isset($_GET['listOf'])) {
+        $_SESSION['currentUser']->displayListOfUser($_GET['listOf']);
+    }else {
+        $_SESSION['currentUser']->displayUsersTable();
+    }
     
     include 'footer.php';
 ?>

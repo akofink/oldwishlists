@@ -1,6 +1,39 @@
+a {
+    margin:0;
+    padding:0 10px 0 10px;
+    width:auto;
+    height:30px;
+    line-height:30px;
+    color:inherit;
+}
 body {
-    background-color:#855;
-    color:#afa;
+    margin:0 0 auto 0;
+    background-color:#700;
+    color:#cfc;
     font-family:fantasy, sans-serif;
     font-size:20px;
+}
+#floatRightBox {
+    float:right;
+    padding:2px;
+    background-color:#272;
+    color:inherit;
+}
+h1, h2, h3 {
+    margin:10px;
+}
+#headerBar {
+    background-color:#272;
+    margin:0;
+    padding:0;
+    height:30px;
+}
+#headerBar a:hover, #floatRightBox a:hover {
+    background-color:#393;
+}
+table {
+    background-color:#600;
+    margin:10px;
+    padding:5px;
+    border:1px solid white;
 }
