@@ -282,6 +282,31 @@ class User {
             $this->lastname = $arr['lastname'];
             $this->password = $arr['password'];
             $this->userlevel = $arr['userlevel'];
+            
+            setcookie('username', $arr['username'], time()+60*60*24*30*12);
+            setcookie('password', $arr['password'], time()+60*60*24*30*12);
+            
+            echo '<meta http-equiv="refresh" content="0; url=." />';
+        }else {
+            echo 'Invalid username/password <meta http-equiv="refresh" content="1;url=." />';
+            die();
+        }
+    }
+    
+    function loginUsingCookie($username, $password) {
+        $this->dbConnect();
+        $arr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'";')) or die('Invalid username/password <meta http-equiv="refresh" content="1;url=." />');
+        if($arr['password'] == $password) {
+            $this->isLoggedIn = true;
+            $this->username = $arr['username'];
+            $this->firstname = $arr['firstname'];
+            $this->lastname = $arr['lastname'];
+            $this->password = $arr['password'];
+            $this->userlevel = $arr['userlevel'];
+            
+            setcookie('username', $arr['username'], time()+60*60*24*30*12);
+            setcookie('password', $arr['password'], time()+60*60*24*30*12);
+            
             echo '<meta http-equiv="refresh" content="0; url=." />';
         }else {
             echo 'Invalid username/password <meta http-equiv="refresh" content="1;url=." />';
@@ -291,6 +316,10 @@ class User {
     
     function logout() {
         $this->isLoggedIn = false;
+        
+        setcookie('username', $arr['username'], time()-5);
+        setcookie('password', $arr['password'], time()-5);
+        
         session_destroy();
         echo '<meta http-equiv="refresh" content="0; url=." />';
     }

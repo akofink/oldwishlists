@@ -16,6 +16,11 @@
             <a href=".">Home</a>
             </div>
             ';
+    
+    if(isset($_COOKIE['username'], $_COOKIE['password']) && !$_SESSION['currentUser']->isLoggedIn()) {
+        $_SESSION['currentUser']->loginUsingCookie($_COOKIE['username'], $_COOKIE['password']);
+    }
+    
     if($_SESSION['currentUser']->isLoggedIn()) {
         $_SESSION['currentUser']->displayLoggedInForm();
         if($_GET['form']=='logout') {
