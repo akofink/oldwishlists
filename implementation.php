@@ -114,7 +114,10 @@ class User {
         
         if($this->isLoggedIn() && $this->username != $username) {
             echo '
-                Click on the &#x2713; or &#x2717; to toggle the status.
+                <br />
+                A &#x2713; denotes that the item is already purchased.<br />
+                A &#x2717; denotes that the item has <b><u>not</u></b> been purchased.<br /><br />
+                <h4>Click on the &#x2713; or &#x2717; to toggle the status.</h4>
                 <table>
                 <th></th>';
         }else {
