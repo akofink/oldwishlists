@@ -9,12 +9,28 @@
     }else if(isset($_GET['form']) && $_GET['form']=='newListItem') {
         $_SESSION['currentUser']->displayNewListItemForm();
     }else if(isset($_POST['item'], $_POST['url'])) {
-        $_SESSION['currentUser']->addListItem($_POST['item'], $_POST['url']);
+        if($_POST['url']=='' || filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
+            $_SESSION['currentUser']->addListItem($_POST['item'], $_POST['url']); 
+        }else {
+            echo '
+                Invalid URL
+                <meta http-equiv="refresh" content="1;url=.?form=newListItem" />
+                ';
+        }
     }else if(isset($_GET['form'])) {
         if($_GET['form']=='newUser') {
             $_SESSION['currentUser']->displayNewUserForm();
         }else if($_GET['form']=='account') {
             $_SESSION['currentUser']->displayEditAccountForm();
+        }else if($_GET['form']=='deleteAccount') {
+            if($_GET['verified']) {
+                $_SESSION['currentUser']->deleteAccount();
+            }else {
+                echo '
+                    Are you sure you want to delete your account, '.$_SESSION['currentUser']->username.'?<br />
+                    <a href=".?form=deleteAccount&verified=true">Yes</a> <a href=".">No</a>
+                    ';
+            }
         }
     }else if(isset($_POST['firstname'], $_POST['lastname'])) {
         if($_POST['editAccount']) {

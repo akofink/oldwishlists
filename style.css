@@ -13,6 +13,9 @@ body {
     font-family:fantasy, sans-serif;
     font-size:20px;
 }
+#deleteAccount:hover {
+    background-color:#f00;
+}
 #floatRightBox {
     float:right;
     padding:2px;
@@ -42,4 +45,9 @@ table {
     margin:10px;
     padding:5px;
     border:1px solid white;
+}
+td {
+    max-width:300px;
+    white-space:nowrap;
+    overflow:hidden;
 }

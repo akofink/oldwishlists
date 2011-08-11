@@ -51,6 +51,13 @@ class User {
         mysql_select_db($this->dbName) or die(mysql_error());
     }
     
+    function deleteAccount() {
+        $this->dbConnect();
+        mysql_query('delete from lists where username="'.$this->username.'"') or die(mysql_error());
+        mysql_query('delete from users where username="'.$this->username.'"') or die(mysql_error());
+        $this->logout();
+    }
+    
     function displayEditAccountForm() {
         echo '
             <h3>Edit Account</h3>
@@ -90,7 +97,10 @@ class User {
                 <input type="submit" value="Update" />
                 <input type="reset" value="Reset" />
                 </td></tr>
-            </form></table>
+            </form></table><br /><br />
+            <table id="deleteAccount">
+            <tr><td><a href=".?form=deleteAccount">Delete account and all list items.</a></td></tr>
+            </table>
             ';
     }
     
@@ -98,12 +108,15 @@ class User {
         $this->dbConnect();
         $userArr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'"'));
         
-        echo '<h3>'.$username.'\'s Christmas List</h3>
-            Click on the &#x2713; or &#x2717; to toggle the status.
-            <table>';
+        echo '<h3>'.$username.'\'s Christmas List</h3>';
         
         if($this->isLoggedIn() && $this->username != $username) {
-            echo '<th></th>';
+            echo '
+                Click on the &#x2713; or &#x2717; to toggle the status.
+                <table>
+                <th></th>';
+        }else {
+            echo '<table>';
         }
         
         echo '
