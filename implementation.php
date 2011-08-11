@@ -19,7 +19,7 @@ class User {
         $this->dbConnect();
         mysql_query('insert into lists (username, item, url) values
                     ("'.$this->username.'", "'.$item.'", "'.$url.'")') or die(mysql_error());
-        echo '<meta http-equiv="refresh" content="0; url=." />';
+        echo '<meta http-equiv="refresh" content="0; url=.?listOf='.$this->username.'" />';
     }
     
     function addUser($username, $firstname, $lastname, $password) {
@@ -30,16 +30,77 @@ class User {
         echo '<meta http-equiv="refresh" content="0; url=." />';
     }
     
+    function changePassword($password) {
+        $this->dbConnect();
+        mysql_query('update users set password="'.$password.'" where username="'.$this->username.'"') or die(mysql_error());
+        echo 'Password Changed.<meta http-equiv="refresh" content="1; url=." />';
+    }
+    
+    function changeStatusOf($id) {
+        $this->dbConnect();
+        $arr = mysql_fetch_assoc(mysql_query('select * from lists where id='.$id)) or die(mysql_error());
+        if($arr['status']) {
+            mysql_query('update lists set status=0 where id='.$id) or die(mysql_error());
+        }else {
+            mysql_query('update lists set status=1 where id='.$id) or die(mysql_error());
+        }
+    }
+    
     function dbConnect() {
         $dbConnection = mysql_connect($this->dbHostname, $this->dbUsername) or die(mysql_error());
         mysql_select_db($this->dbName) or die(mysql_error());
+    }
+    
+    function displayEditAccountForm() {
+        echo '
+            <h3>Edit Account</h3>
+            <form action="." method="post">
+                <table>
+                <tr><td>
+                <label for="firstname">First Name: </label></td><td>
+                <input type="text" id="firstname" name="firstname" value="'.$this->firstname.'" />
+                </td></tr>
+                <tr><td>
+                <label for="lastname">Last Name: </label></td><td>
+                <input type="text" id="lastname" name="lastname" value="'.$this->lastname.'" />
+                </td></tr>
+                <tr><td>
+                <input type="hidden" name="editAccount" value="true" />
+                <input type="submit" value="Update" />
+                <input type="reset" value="Reset" />
+                </td></tr>
+            </form></table><br /><br />
+            <h3>Change Password</h3>
+            <form action="." method="post">
+                <table>
+                <tr><td>
+                <label for="oldPassword">Old Password: </label></td><td>
+                <input type="password" id="oldPassword" name="oldPassword" />
+                </td></tr>
+                <tr><td>
+                <label for="password1">New Password: </label></td><td>
+                <input type="password" id="password1" name="password1" />
+                </td></tr>
+                <tr><td>
+                <tr><td>
+                <label for="password2">Confirm Password: </label></td><td>
+                <input type="password" id="password2" name="password2" />
+                </td></tr>
+                <tr><td>
+                <input type="submit" value="Update" />
+                <input type="reset" value="Reset" />
+                </td></tr>
+            </form></table>
+            ';
     }
     
     function displayListOfUser($username) {
         $this->dbConnect();
         $userArr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'"'));
         
-        echo '<h3>'.$username.'\'s Christmas List</h3><table>';
+        echo '<h3>'.$username.'\'s Christmas List</h3>
+            Click on the &#x2713; or &#x2717; to toggle the status.
+            <table>';
         
         if($this->isLoggedIn() && $this->username != $username) {
             echo '<th></th>';
@@ -49,22 +110,31 @@ class User {
             <th>Item</th>
             <th>URL</th>
             ';
-            
+        
+        if($this->isLoggedIn() && $this->username == $username) {
+            echo '<th></th>';
+        }
+        
         $result = mysql_query('select * from lists where username="'.$username.'"');
         while($row = mysql_fetch_array($result)) {
             echo '<tr>';
             if($this->isLoggedIn() && $this->username != $username) {
                 if($row['status']) {
-                    echo '<td>&#x2713;</td>';
+                    echo '<td><a href=".?listOf='.$row['username'].'&changeStatusOf='.$row['id'].'">&#x2713;</a></td>';
                 }else {
-                    echo '<td></td>';
+                    echo '<td><a href=".?listOf='.$row['username'].'&changeStatusOf='.$row['id'].'">&#x2717;</a></td>';
                 }
             }
             echo '
                 <td>'.$row['item'].'</td>
-                <td>'.$row['url'].'</td>
-                </tr>
+                <td><a href="'.$row['url'].'">'.$row['url'].'</a></td>
                 ';
+            
+            if($this->isLoggedIn() && $this->username == $username) {
+                echo '<th><a href=".?removeListItem='.$row['id'].'">Remove Item</a></th>';
+            }
+            
+            echo '</tr>';
         }
     }
     
@@ -90,6 +160,7 @@ class User {
         echo '
                 <div id="floatRightBox">
                 <a href=".?form=newListItem">New List Item</a>
+                <a href=".?form=account">Account</a>
                 <a href=".?form=logout">Logout</a>
                 </div>
                 ';
@@ -172,6 +243,15 @@ class User {
         echo '</table>';
     }
     
+    function editAccount($firstname, $lastname) {
+        $this->dbConnect();
+        mysql_query('update users set firstname="'.$firstname.'",
+                    lastname="'.$lastname.'" where username="'.$this->username.'"') or die(mysql_error());
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        echo '<meta http-equiv="refresh" content="0; url=." />';
+    }
+    
     function isLoggedIn() {
         return $this->isLoggedIn;
     }
@@ -197,6 +277,14 @@ class User {
         $this->isLoggedIn = false;
         session_destroy();
         echo '<meta http-equiv="refresh" content="0; url=." />';
+    }
+    
+    function removeListItem($id) {
+        $this->dbConnect();
+        $arr = mysql_fetch_assoc(mysql_query('select * from lists where id='.$id));
+        $username = $arr['username'];
+        mysql_query('delete from lists where id='.$id) or die(mysql_error());
+        echo '<meta http-equiv="refresh" content="0; url=.?listOf='.$username.'" />';
     }
 }
 ?>
