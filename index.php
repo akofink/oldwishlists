@@ -1,6 +1,6 @@
 <?php
     include 'header.php';
-    
+    echo '<h1>Christmas Lists</h1>';
     if(isset($_GET['listOf'])) {
         if(isset($_GET['changeStatusOf'])) {
             $_SESSION['currentUser']->changeStatusOf($_GET['changeStatusOf']);

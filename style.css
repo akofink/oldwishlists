@@ -5,6 +5,7 @@ a {
     height:30px;
     line-height:30px;
     color:inherit;
+    border-radius:5px;
 }
 body {
     margin:0 0 auto 0;
@@ -21,6 +22,7 @@ body {
     padding:2px;
     background-color:#272;
     color:inherit;
+    border-bottom-left-radius:10px;
 }
 h1, h2, h3 {
     margin:10px;
@@ -45,6 +47,7 @@ table {
     margin:10px;
     padding:5px;
     border:1px solid white;
+    border-radius:5px;
 }
 td {
     max-width:300px;
