@@ -46,6 +46,7 @@ class User {
         }else {
             mysql_query('update lists set status=1 where id='.$id) or die(mysql_error());
         }
+        echo '<meta http-equiv="refresh" content="0; url=.?listOf='.$arr['username'].'" />';
     }
     
     function dbConnect() {
