@@ -313,7 +313,9 @@ class User {
             
             echo '<meta http-equiv="refresh" content="0; url=." />';
         }else {
-            echo 'Invalid username/password <meta http-equiv="refresh" content="1;url=." />';
+            echo 'Invalid username/password';
+            $this->logout();
+            echo '<meta http-equiv="refresh" content="1;url=." />';
             die();
         }
     }
