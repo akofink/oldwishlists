@@ -51,6 +51,5 @@ table {
 }
 td {
     max-width:300px;
-    white-space:nowrap;
-    overflow:hidden;
+    overflow:scroll;
 }
