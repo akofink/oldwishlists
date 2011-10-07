@@ -235,7 +235,7 @@ class User {
                 <tr><td>
                 <input type="submit" value="Submit" />
                 <input type="reset" value="Reset" />
-                </td></tr>
+                </td><td></td></tr>
             </form></table>
             ';
     }
