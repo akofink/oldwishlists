@@ -27,6 +27,7 @@ class User {
         mysql_query('insert into users (username, firstname, lastname, password)
                     values ("'.$username.'", "'.$firstname.'", "'.$lastname.'", sha("'.$password.'"))
                     ') or die(mysql_error());
+        echo '<script type="text/javascript">alert("Your username is '.$username.'.");</script>';
         echo '<meta http-equiv="refresh" content="0; url=." />';
     }
     

@@ -43,7 +43,7 @@
                 $_SESSION['currentUser']->displayNewUserForm($_POST['username'], $_POST['firstname'], $_POST['lastname']);
                 echo 'Passwords must match.';
             }else {
-                $_SESSION['currentUser']->addUser($_POST['username'], $_POST['firstname'], $_POST['lastname'], $_POST['password1']);
+                $_SESSION['currentUser']->addUser(preg_replace('/\s*/','',$_POST['username']), $_POST['firstname'], $_POST['lastname'], $_POST['password1']);
             }
         }
     }else if(isset($_POST['oldPassword'], $_POST['password1'], $_POST['password2'])) {
