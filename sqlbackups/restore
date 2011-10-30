@@ -1,2 +1,2 @@
 #!/bin/bash
-mysql -uroot -pskylark243 christmaslists < ./latest.sql
+mysql -uroot -p$1 christmaslists < ./latest.sql
