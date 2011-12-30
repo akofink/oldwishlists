@@ -8,7 +8,7 @@
     echo '
             <!DOCTYPE html>
             <head>
-            <title>Christmas Lists</title>
+            <title>Wish Lists</title>
             <link rel="stylesheet" type="text/css" href="style.css" />
             </head>
             <body>
