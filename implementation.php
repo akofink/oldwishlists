@@ -112,7 +112,7 @@ class User {
         $this->dbConnect();
         $userArr = mysql_fetch_assoc(mysql_query('select * from users where username="'.$username.'"'));
         
-        echo '<h3>'.$username.'\'s Christmas List</h3>';
+        echo '<h3>'.$username.'\'s Wish List</h3>';
         
         if($this->isLoggedIn() && $this->username != $username) {
             echo '
