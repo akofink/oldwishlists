@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /var/www/christmaslists/sqlbackups
+cd /var/www/wishlists/sqlbackups
 mysqldump -uroot -p$1 --databases christmaslists > ./latest.sql
 git add .
 git commit -am 'auto commit sql backups'
