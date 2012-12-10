@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: christmaslists
+-- Host: localhost    Database: a6169600_wishlis
 -- ------------------------------------------------------
 -- Server version	5.5.28-0ubuntu0.12.04.2
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `christmaslists`
+-- Current Database: `a6169600_wishlis`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `christmaslists` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `a6169600_wishlis` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `christmaslists`;
+USE `a6169600_wishlis`;
 
 --
 -- Table structure for table `lists`
