@@ -3,9 +3,9 @@ session_start();
 
 class User {
     var $dbHostname = 'localhost';
-    var $dbUsername = 'anonymous';
+    var $dbUsername = 'a6169600_wishlis';
     var $dbConnection;
-    var $dbName = 'christmaslists';
+    var $dbName = 'a6169600_wishlis';
     
     var $username;
     var $firstname;
